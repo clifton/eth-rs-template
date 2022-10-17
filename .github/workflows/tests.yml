@@ -41,30 +41,30 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Checkout submodules
-        run: git submodule init && git submodule update --recursive
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-
-      - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
-
       - uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
+
+      - name: Install nightly toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          profile: minimal
+          components: rustfmt, clippy
+          override: true
 
       - name: cargo fmt
         run: cargo +nightly fmt --all -- --check
 
       - name: cargo clippy
         run: cargo +nightly clippy --all --all-features -- -D warnings
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
 
       - name: cargo test
         run: cargo test --all --all-features

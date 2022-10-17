@@ -31,4 +31,4 @@ jobs:
           mv $PROJECT_NAME ${{ runner.temp }}/
           cd ${{ runner.temp }}/$PROJECT_NAME
           cargo check
-          cargo run -p $PROJECT_NAME
+          cargo run balance 0x00000000219ab540356cbb839cbe05303d7705fa
