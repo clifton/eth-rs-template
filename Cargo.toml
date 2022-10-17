@@ -1,0 +1,7 @@
+[workspace]
+members = ["bindings", "main"]
+
+[workspace.dependencies]
+ethers = { git = "https://github.com/gakonst/ethers-rs", default-features = false, features = [
+  "abigen",
+] }

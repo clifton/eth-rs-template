@@ -1,0 +1,19 @@
+{
+  "rust-analyzer.checkOnSave.overrideCommand": [
+    "cargo",
+    "+nightly",
+    "clippy",
+    "--all-features",
+    "--message-format=json"
+  ],
+  "rust-analyzer.rustfmt.extraArgs": [
+    "+nightly"
+  ],
+  "solidity.remappings": [
+    "hardhat/=contracts/lib/forge-std/src/",
+    "forge-std/=contracts/lib/forge-std/src/",
+    "openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/",
+  ],
+  "evenBetterToml.formatter.allowedBlankLines": 1,
+  "evenBetterToml.formatter.columnWidth": 80,
+}
