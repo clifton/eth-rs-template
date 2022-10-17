@@ -1,9 +1,12 @@
-name: Try to expand local template using cargo-template
+name: Template
 on:
   push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  build:
+  generate:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: mytemplate
@@ -15,6 +18,12 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+          entrypoint: ${{ runner.temp }}/$PROJECT_NAME
+
       # we need to move the generated project to a temp folder, away from the template project
       # otherwise `cargo` runs would fail
       # see https://github.com/rust-lang/cargo/issues/9922
@@ -22,3 +31,4 @@ jobs:
           mv $PROJECT_NAME ${{ runner.temp }}/
           cd ${{ runner.temp }}/$PROJECT_NAME
           cargo check
+          cargo run -p $PROJECT_NAME

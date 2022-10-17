@@ -24,5 +24,3 @@ format: ## Format project
 test: ## Run tests
 	forge test --root contracts
 	cargo test --all --all-features
-
-
