@@ -4,11 +4,10 @@ on:
       - main
   pull_request:
 
-name: Rust
+name: Tests
 
 jobs:
-  solidity-tests:
-    name: Solidity Tests
+  solidity:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,50 +26,26 @@ jobs:
         working-directory: contracts
         run: forge install
 
-      - name: Run forge tests
+      - name: forge fmt --check
+        working-directory: contracts
+        run: forge fmt --check
+
+      - name: forge test
         working-directory: contracts
         run: forge test
 
-  rust-tests:
-    name: Rust Tests
+  rust:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
-
-      - name: Checkout submodules
-        run: git submodule init && git submodule update --recursive
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-
-      - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
 
       - uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
 
-      - name: cargo test
-        run: cargo test --all --all-features
-
-  rust-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Checkout submodules
-        run: git submodule init && git submodule update --recursive
-
-      - name: Install toolchain
+      - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
@@ -78,34 +53,18 @@ jobs:
           components: rustfmt, clippy
           override: true
 
-      - uses: Swatinem/rust-cache@v2
-        with:
-          cache-on-failure: true
-
       - name: cargo fmt
         run: cargo +nightly fmt --all -- --check
 
       - name: cargo clippy
         run: cargo +nightly clippy --all --all-features -- -D warnings
 
-  solidity-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Checkout submodules
-        run: git submodule init && git submodule update --recursive
-
-      - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
         with:
-          version: nightly
+          toolchain: stable
+          profile: minimal
+          override: true
 
-      - name: Pull library deps
-        working-directory: contracts
-        run: forge install
-
-      - name: Run forge tests
-        working-directory: contracts
-        run: forge fmt --check
+      - name: cargo test
+        run: cargo test --all --all-features
