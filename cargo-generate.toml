@@ -1,2 +1,8 @@
 [template]
-exclude = [".github/workflows/generate.yml", "contracts/lib/*", "target"]
+exclude = [
+  ".github/workflows/generate.yml",
+  "contracts/cache",
+  "contracts/lib",
+  "contracts/out",
+  "target",
+]
